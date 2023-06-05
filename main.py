@@ -4,7 +4,8 @@ import json
 url = "https://filmezek.com/"
 
 def main():
-    filmnev = input("").strip()
+    #filmnev = input("").strip()
+    filmnev = "pók"
     response = request_films(filmnev)
     
     if response.status_code != 200:
@@ -13,11 +14,16 @@ def main():
     content = json.loads(response.text)
 
     list_films(content)
+
+    valasztott = int(input(f"Válassz egyet [0-{len(content)-1}]: "))
+
+    print(f"Link: {url}{content[valasztott]['type']}/{content[valasztott]['MovieSlug']}/")
         
 
 def list_films(json_content):
-    for item in json_content:
-        print(item["MovieTitle"])
+    for i in range(len(json_content)):
+        current = json_content[i]
+        print(f"{i}. \t{current['MovieTitle']}")
 
 def request_films(filmnev):
     request_url = url+"searchinput.php?searchType=1&term="+filmnev
@@ -32,3 +38,13 @@ def request_films(filmnev):
 
 if __name__ == "__main__":
     main()
+
+'''
+{
+    "MovieTitle": "A csodálatos Pókember",
+    "MovieSlug": "a-csodalatos-pokember",
+    "MovieTipus": "film",
+    "MovieCover": "tt0948470.jpg",
+    "type": "online-filmek"
+}
+'''

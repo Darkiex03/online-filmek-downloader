@@ -1,12 +1,34 @@
 import requests
+import json
 
-url = "https://online-filmek.me"
+url = "https://filmezek.com/"
 
-response = requests.get(url)
+def main():
+    filmnev = input("").strip()
+    response = request_films(filmnev)
+    
+    if response.status_code != 200:
+        print(response.status_code, " HIBA")
 
-if response.status_code == 200:
+    content = json.loads(response.text)
 
-    content = response.content
-    print(content)
-else:
-    print("Failed to retrieve the web page. Status code:", response.status_code)
+    list_films(content)
+        
+
+def list_films(json_content):
+    for item in json_content:
+        print(item["MovieTitle"])
+
+def request_films(filmnev):
+    request_url = url+"searchinput.php?searchType=1&term="+filmnev
+
+    headers = {
+        "Accept": "application/json"
+    }
+
+    response = requests.get(request_url, headers=headers)
+    
+    return response
+
+if __name__ == "__main__":
+    main()

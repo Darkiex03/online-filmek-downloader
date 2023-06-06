@@ -2,10 +2,12 @@ import requests
 import json
 
 url = "https://filmezek.com/"
+btn_string = "Beküldött linkek megtekintése"
+
 
 def main():
     #filmnev = input("").strip()
-    filmnev = "pók"
+    filmnev = "pókember"
     response = request_films(filmnev)
     
     if response.status_code != 200:
@@ -17,8 +19,21 @@ def main():
 
     valasztott = int(input(f"Válassz egyet [0-{len(content)-1}]: "))
 
-    print(f"Link: {url}{content[valasztott]['type']}/{content[valasztott]['MovieSlug']}/")
-        
+    film_url = f"{url}{content[valasztott]['type']}/{content[valasztott]['MovieSlug']}/"
+    print(film_url)
+
+    response = requests.get(film_url)
+    response = response.text
+    
+    film_link = 'https://online-filmek.app/film/'
+    film_link_index = response.index(film_link) + len(film_link) - 1
+
+    while response[film_link_index] != "'":
+        film_link_index += 1
+        film_link += response[film_link_index]
+    
+    print(film_link)
+
 
 def list_films(json_content):
     for i in range(len(json_content)):

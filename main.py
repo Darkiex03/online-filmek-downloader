@@ -28,10 +28,10 @@ def main():
     film_link = 'https://online-filmek.app/film/'
     film_link_index = response.index(film_link) + len(film_link) - 1
 
-    while response[film_link_index] != "'":
+    while response[film_link_index+1] != '"':
         film_link_index += 1
         film_link += response[film_link_index]
-    
+
     print(film_link)
 
 
